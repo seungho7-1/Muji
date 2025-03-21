@@ -1,0 +1,75 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+    <h5 class="my-3 border-bottom">식품 추가</h5>
+    <form th:action="@{/mujifood/create}" th:object="${foodForm}" method="post" enctype="multipart/form-data">
+
+        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <div th:each="err: ${#fields.allErrors()}" th:text="${err}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">사진 첨부</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+            <div id="imagePreview" style="margin-top: 10px;"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="foodName" class="form-label">식품명</label>
+            <input type="text" name="foodName" id="foodName" class="form-control" placeholder="ex) 버터 치킨 카레">
+        </div>
+
+        <div class="mb-3">
+            <label for="kind" class="form-label">종류</label>
+            <select class="form-control" th:field="*{kind}" id="kind">
+                <option value="" disabled selected>선택하세요</option>
+                <option th:each="kind : ${kind}" th:value="${kind}" th:text="${kind}"></option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="createDate" class="form-label">유통 기한</label>
+            <input type="text" name="createDate" id="createDate" class="form-control" placeholder="ex) 25/01/01">
+        </div>
+
+        <input type="submit" value="추가하기" class="create btn btn-secondary" th:data-uri="@{/mujifood/list}">
+
+        <a th:href="@{/mujifood/list}" class="btn btn-secondary">돌아가기</a>
+    </form>
+</div>
+
+<script layout:fragment="script" type="text/javascript">
+    const imageInput = document.getElementById('image'); // ID 수정
+    const imagePreview = document.getElementById('imagePreview');
+
+    imageInput.addEventListener('change', function() {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.innerHTML = '<img src="' + e.target.result + '" style="max-width: 300px; max-height: 300px;">';
+                };
+
+                reader.readAsDataURL(file);
+            } else {
+                alert('이미지 파일만 선택해주세요.');
+                this.value = ''; // 파일 선택 취소
+                imagePreview.innerHTML = '';
+            }
+        } else {
+            imagePreview.innerHTML = '';
+        }
+    });
+
+    const create_element = document.getElementsByClassName("create");
+    Array.from(create_element).forEach(function(element) {
+        element.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (confirm("추가하시겠습니까?")) {
+                this.closest('form').submit();
+            }
+        });
+    });
+</script>
+</html>

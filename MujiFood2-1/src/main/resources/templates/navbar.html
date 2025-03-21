@@ -1,0 +1,19 @@
+<nav th:fragment ="navbarFragment" class="navbar navbar navbar-expand-lg navbar-light bg-light border-bottom">
+	<div class="container-fluid">
+		<a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+			<span class="fs-4">MujiFood 체크리스트</span>
+		</a>
+		
+	<div>
+		<ul class="nav">
+			<li class="nav-item">
+				<a class="nav-link link-body-emphasis px-2" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
+				<a class="nav-link link-body-emphasis px-2" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그 아웃</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link link-body-emphasis px-2" th:href="@{/user/signup}">회원 가입</a>
+			</li> 
+		</ul>
+	</div>
+	</div>
+</nav>

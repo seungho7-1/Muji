@@ -1,0 +1,54 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+		<h1>보충 리스트</h1>
+		<button id="clearStorage" class="btn btn-secondary">전체 삭제</button> <!-- 전체 삭제 버튼 -->
+		<button id="selectclearStorage" class="btn btn-secondary">삭제</button> <!-- 전체 삭제 버튼 -->
+
+		<table class="table">
+			<thead class="table-dark">
+				<tr class="text-center">
+					<th>ID</th>
+					<th>식품명</th>
+					<th>종류</th>
+					<th>유통 기한</th>
+					<th>개수</th>
+				</tr>
+			</thead>
+			<tbody id="foodList" class="text-center">
+                    <!-- 데이터가 여기에 삽입됩니다. -->
+			</tbody>
+		</table>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		const selectedFoods = JSON.parse(localStorage.getItem('selectedFoods')) || [];
+		const foodList = document.getElementById('foodList');
+
+	        // 데이터가 있는지 확인
+		if (selectedFoods.length === 0) {
+			const row = document.createElement('tr');
+			row.innerHTML = '<td colspan="5">선택된 식품이 없습니다.</td>';
+			foodList.appendChild(row);
+		} else {
+			selectedFoods.forEach(food => {
+				const row = document.createElement('tr');
+				row.innerHTML = `
+				<td>${food.id}</td>
+				<td>${food.name}</td>
+				<td>${food.kind}</td>
+				<td>${food.expirationDate}</td>
+				<td>${food.quantity}</td>
+				`;
+				foodList.appendChild(row);
+			});
+		}
+		document.getElementById('clearStorage').addEventListener('click', function() {
+			localStorage.removeItem('selectedFoods'); // 로컬 스토리지 데이터 삭제
+			localStorage.clear(); // 로컬 스토리지의 모든 데이터 삭제
+			// 페이지 새로 고침 또는 데이터 업데이트
+			alert('선택된 식품 리스트가 삭제되었습니다.');
+			location.reload(); // 페이지 새로 고침
+		});
+	});
+</script>
+</div>
+</html>

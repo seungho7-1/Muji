@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+	<form action="/upload" method="post" enctype="multipart/form-data">
+	    <input type="file" name="file">
+	    <button type="submit">업로드</button>
+	</form>
+    <h1>Welcome, <span th:text="${name}"></span>!</h1>
+    <p>Your email: <span th:text="${email}"></span></p>
+</body>
+</html>

@@ -1,0 +1,15 @@
+
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+	<h1 th:text = "${food.foodname}"></h1>
+	<h2 th:text = "${food.kind}"></h2>
+	<h3 th:text = "${food.createDate}"></h3>
+
+	<form th:action ="@{|/mujifood/list/${food.id}|}" method="get">
+		<textarea name="createDate" id="createDate" cols="10"></textarea>
+		<input type="submit" value="날짜를 입력해주세요.">
+	</form>
+		
+</div>
+
+</html>

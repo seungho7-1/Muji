@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, 그리고 Bootstrap 기여자들">
+    <meta name="generator" content="Hugo 0.104.2">
+    <title>무지 식품</title>
+	
+	<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+	<!-- sbb CSS -->
+	<link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+	<!-- Bootstrap JS-->
+	<script th:src="@{/bootstrap.min.js}"></script>
+    <link rel="canonical" href="https://getbootstrap.kr/docs/5.2/examples/jumbotron/">
+<link href="/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <!-- Favicons -->
+<link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
+<link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
+<meta name="theme-color" content="#712cf9">
+	<nav th:fragment ="navbarFragment" class="navbar navbar navbar-expand-lg navbar-light bg-light border-bottom">
+		<div class="container-fluid">
+			<a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+				<span class="fs-4">MujiFood 체크리스트</span>
+			</a>
+			<div class="text-center">
+					<ul class="nav">
+						<li class="nav-item">
+							<a class="nav-link link-body-emphasis px-2" sec:authorize="isAnonymous()" th:href="@{/user/login}">로그인</a>
+							<a class="nav-link link-body-emphasis px-2" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">로그 아웃</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link link-body-emphasis px-2" th:href="@{/user/signup}">회원 가입</a>
+						</li> 
+					</ul>
+				</div>
+		</div>
+	</nav>
+  </head>
+<body>
+<main>
+  <div class="container py-4">
+    <div class="p-5 mb-4 bg-light border rounded-3">
+      <div class="container-fluid py-5  rounded-3">
+        <h1 class="display-5 fw-bold">식품 유퉁기한 리스트</h1>
+        <p class="col-md-8 fs-4">식품 유통기한을 확인하여 보충 시에 날짜 착오에 대한 번거로움을 덜어냅니다.</p>
+		<a th:href="@{/mujifood/list}" class="btn btn-primary btn-lg" >식품 리스트 확인하기</a>
+
+      </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+      <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2>식품 보충 리스트</h2>
+          <p>더 이상 사진을 찍거나 메모하지 않고, 몇 번의 클릭만으로 보충할 식품 리스트를 간편하게 정리합니다.</p>
+		  <a th:href="@{/mujifood/suppliments}" class="btn btn-secondary">보충 리스트</a>
+        </div>
+      </div>
+	  
+      <div class="col-md-6">
+        <div class="h-100 p-5 bg-light border rounded-3">
+          <h2>문의 사항</h2>
+          <p>해당 서비스에 대한 의견과 개선사항 및 오류에 대해 자유롭게 작성해주세요.</p>
+		  <a th:href="@{/question/list}" class="btn btn-secondary">문의하기</a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="pt-3 mt-4 text-muted border-top">
+      &copy; 2025
+    </footer>
+  </div>
+</main>
+ </body>
+</html>

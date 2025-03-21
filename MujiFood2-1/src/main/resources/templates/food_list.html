@@ -1,0 +1,153 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container my-3">
+	<div class="row my-3">
+		<div class = "col-6">
+			<!--<a th:href="@{/mujifood/create}" class="btn btn-secondary">식품 추가 하기</a>	-->
+			<!-- 인증되지 않은 사용자에게 보여줄 내용 -->
+			<div sec:authorize="isAnonymous()">
+				<a href="#" onclick="alert('로그인이 필요합니다.'); window.location.href='/user/login'; return false;" class="btn btn-secondary">식품 추가 하기</a>
+			</div>
+			<!-- 인증된 사용자에게 보여줄 내용 -->
+			<div sec:authorize="isAuthenticated()">
+			    <a th:href="@{/mujifood/create}" class="btn btn-secondary">식품 추가 하기</a>
+				<a th:href="@{/mujifood/suppliments}" class="btn btn-secondary">보충 하기</a>
+
+			</div>
+	
+		</div>
+		<!-- 검색 UI 시작 -->
+		<div class="col-6">
+			<div class="input-group">
+				<input type="text" id="search_kw" class="form-control" th:value="${kw}" >
+				<button class="btn btn-secondary" type="button" id="btn_search" >찾기</button>
+			</div>
+		</div>
+		<!-- 검색 UI 끝 -->
+	</div>
+		<!-- 식품 추가 버튼 -->
+		<table class="table">
+			<thead class="table-dark">
+				<tr class="text-center">
+					<th>번 호</th>
+					<th>식 품 명</th>
+					<th>종 류</th>
+					<th>유통 기한</th>
+					<th>최종 작성자</th>
+				    <th>수정 날짜</th>
+					<th>수정 및 삭제</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr class="text-center" th:each="mujifood, loop : ${paging}">
+					<td th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
+
+					<td class="text-center">
+						<a th:href="@{|/mujifood/list/${mujifood.id}|}"
+						th:text="${mujifood.foodname}"></a>
+					</td>
+					<td th:text = "${mujifood.kind}"></td>
+					<td th:text = "${mujifood.createDate}"></td>
+					<td><span th:if="${mujifood.siteuser != null}"
+					th:text="${mujifood.siteuser.username}"></span></td>
+					<td th:text = "${#temporals.format(mujifood.modifyDate,'yyyy-MM-dd HH:mm')}"></td>
+					
+					<td>
+					    <span sec:authorize="isAnonymous()">
+							<a href="#" onclick="alert('로그인이 필요합니다.'); window.location.href='/user/login'; return false;" class="btn btn-secondary">수정</a>
+					    </span>
+					    <span sec:authorize="isAuthenticated()">
+					        <a th:href="@{|/mujifood/modify/${mujifood.id}|}" class="btn btn-secondary">수정</a>
+					    </span>
+						<span sec:authorize="isAnonymous()">
+							<a href="#" onclick="alert('로그인이 필요합니다.'); window.location.href='/user/login'; return false;" class="btn btn-secondary">삭제</a>
+						</span>
+						<span sec:authorize="isAuthenticated()">
+							<a th:href="@{|/mujifood/delete/${mujifood.id}|}" class="delete btn btn-secondary">삭제</a>
+						</span>	
+					</td>
+
+
+				    <!-- 삭제 버튼 
+						<a href="javascript:void(0);" 
+						th:data-uri="@{|/mujifood/delete/${mujifood.id}|}" 
+						class="delete btn btn-secondary">삭제</a>
+						-->
+				    <!-- 삭제 버튼 -->
+				</tr>
+			</tbody>
+		</table>		
+		<div th:if="${!paging.isEmpty()}">
+		    <ul class="pagination justify-content-center">
+		        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+		            <a class="page-link" th:href="@{|?page=${paging.number-1}|}">
+		                <span>이전</span>
+		            </a>
+		        </li>
+				
+		        <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+				th:if="${page >= paging.number-5 and page <= paging.number +5}"
+		            th:classappend="${page  == paging.number} ? 'active'" 
+					class="page-item">
+		            <a th:text="${page + 1}" class="page-link"
+					th:href="@{|?page=${page}|}"></a>
+		        </li>
+				
+		        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+		            <a class="page-link" th:href="@{|?page=${paging.number+1}|}">
+		                <span>다음</span>
+		            </a>
+		        </li>
+		    </ul>
+		</div>
+		<form th:action="@{/mujifood/list}" method="get" id="searchForm">
+				<input type="hidden" id="kw" name="kw" th:value="${kw}">
+				<input type="hidden" id="page" name="page" th:value="${paging.number}">
+		</form>
+</div>
+
+<script layout:fragment="script" type='text/javascript'>
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function(element) {
+        element.addEventListener('click', function(event) {
+            console.log('삭제 버튼 클릭됨'); // 디버깅 로그 추가
+            event.preventDefault(); // 기본 동작 방지
+            
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.href; // href로 이동
+            }
+        });
+    });
+</script>
+
+
+
+
+<!-- 검색 JS -->
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+
+    const btn_search = document.getElementById("btn_search");
+    btn_search.addEventListener('click', function() {
+		const searchValue = document.getElementById('search_kw').value.trim(); // 공백 제거
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('searchForm').submit();
+    });
+
+    // 엔터 키 이벤트 처리
+    const searchInput = document.getElementById('search_kw');
+    searchInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // 기본 엔터 키 동작 방지
+            btn_search.click(); // 검색 버튼 클릭 이벤트 호출
+        }
+    });
+</script>
+</html>

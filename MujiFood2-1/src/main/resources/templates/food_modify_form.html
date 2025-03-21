@@ -1,0 +1,34 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
+    <h5 class="my-3 border-bottom pb-2">식품 수정</h5>
+    <form th:object="${food}" th:action="@{/mujifood/modify/{id}(id=${food.id})}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="image" class="form-label">사진 첨부</label>
+            <input type="file" name="image" id="image" class="form-control" accept="image/*">
+            <div id="imagePreview" style="margin-top: 10px;">
+                <img th:if="${food.imagePath}" th:src="${food.imagePath}" style="max-width: 300px; max-height: 300px;">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="foodName" class="form-label">식품명</label>
+            <input type="text" th:field="*{foodname}" id="foodName" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="kind" class="form-label">종류</label>
+            <select class="form-control" th:field="*{kind}" id="kind">
+                <option value="" disabled selected>선택하세요</option>
+                <option th:each="kind : ${kind}" th:value="${kind}" th:text="${kind}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="createDate" class="form-label">유통 기한</label>
+            <input type="date" th:field="*{createDate}" id="createDate" class="form-control">
+        </div>
+        <input type="submit" value="수정하기" class="btn btn btn-secondary">
+        <a th:href="@{/mujifood/list}" class="btn btn btn-secondary">돌아가기</a>
+    </form>
+</div>
+<script layout:fragment="script" type="text/javascript">
+    // ... (이미지 미리보기 JavaScript 코드) ...
+</script>
+</html>
